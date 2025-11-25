@@ -1,0 +1,26 @@
+{
+  "name": "ifc-converter-cli",
+  "version": "1.0.0",
+  "description": "Convert IFC files to Fragment format (supports large files 10GB+)",
+  "main": "cli.js",
+  "bin": {
+    "ifc-convert": "./cli.js"
+  },
+  "scripts": {
+    "start": "node cli.js"
+  },
+  "keywords": [
+    "ifc",
+    "fragment",
+    "bim",
+    "converter"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@thatopen/fragments": "latest",
+    "commander": "^11.0.0",
+    "glob": "^10.5.0",
+    "web-ifc": "^0.0.72"
+  }
+}
