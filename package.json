@@ -7,20 +7,16 @@
     "ifc-convert": "./cli.js"
   },
   "scripts": {
-    "start": "node cli.js"
+    "start": "node cli.js",
+    "gui": "node gui-converter.js"
   },
-  "keywords": [
-    "ifc",
-    "fragment",
-    "bim",
-    "converter"
-  ],
+  "keywords": ["ifc", "fragment", "bim", "converter"],
   "author": "",
   "license": "MIT",
   "dependencies": {
     "@thatopen/fragments": "latest",
+    "web-ifc": "^0.0.72",
     "commander": "^11.0.0",
-    "glob": "^10.5.0",
-    "web-ifc": "^0.0.72"
+    "glob": "^10.0.0"
   }
 }
