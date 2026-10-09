@@ -1,86 +1,66 @@
-# 🏗️ IFC to Fragment Converter
+# IFC to Fragment Converter (ifc_to_frag-Local)
 
-แปลงไฟล์ IFC เป็น Fragment format รองรับไฟล์ขนาดใหญ่ถึง 10GB+
+## ภาพรวม
 
-## 🚀 วิธีใช้งาน (แนะนำ - GUI Mode)
+เครื่องมือบน Windows สำหรับแปลงไฟล์ IFC เป็น Fragment (`.frag`) ของ That Open
+รองรับไฟล์ขนาดใหญ่ถึง 10GB+ ใช้ได้ 3 แบบ: GUI เลือกไฟล์, โฟลเดอร์เริ่มต้น
+(`_Input-Ifc` → `_Output-frag`) หรือ command line
 
-### วิธีที่ 1: ใช้ GUI (ง่ายที่สุด)
+- ไฟล์ < 500MB ใช้ standard mode (เร็วกว่า)
+- ไฟล์ > 500MB ใช้ streaming mode (ประหยัด RAM)
+- ไฟล์ output มีชื่อเดียวกับไฟล์ต้นฉบับ แต่นามสกุลเป็น `.frag`
 
-1. **ดับเบิลคลิก** `convert-gui.bat`
-2. เลือกไฟล์ IFC จาก File Dialog (กด Ctrl+Click เพื่อเลือกหลายไฟล์)
-3. รอให้แปลงเสร็จ
-4. ไฟล์ .frag จะถูกบันทึกในโฟลเดอร์เดียวกับไฟล์ .ifc
+## Tech stack
 
-### วิธีที่ 2: ใช้โฟลเดอร์เริ่มต้น
+- **Node.js** 16+ บน **Windows 10** ขึ้นไป (ใช้ PowerShell สำหรับ File Dialog)
+- **`@thatopen/fragments`** และ **`web-ifc`** สำหรับอ่าน IFC และเขียน Fragment
+- **`commander`** (CLI) และ **`glob`** (ค้นหาไฟล์)
+- ไฟล์ `.bat` สำหรับดับเบิลคลิกใช้งาน
 
-1. วางไฟล์ IFC ในโฟลเดอร์ `_Input-Ifc`
-2. ดับเบิลคลิก `convert.bat`
-3. ไฟล์ .frag จะอยู่ในโฟลเดอร์ `_Output-frag`
+## Project tree
 
-### วิธีที่ 3: Command Line
-```bash
-# GUI mode
-node gui-converter.js
-
-# Auto mode (ใช้โฟลเดอร์เริ่มต้น)
-node cli.js auto
-
-# แปลงไฟล์เดียว
-node cli.js convert "path/to/file.ifc"
-
-# แปลงทั้งโฟลเดอร์
-node cli.js folder "path/to/folder" -o "output/folder"
-```
-
-## 📁 โครงสร้างโฟลเดอร์
-```
-ifc-converter-cli/
-├── convert-gui.bat          ← ดับเบิลคลิก (แนะนำ - เลือกไฟล์เอง)
-├── convert.bat              ← ดับเบิลคลิก (ใช้โฟลเดอร์เริ่มต้น)
-├── gui-converter.js         ← GUI mode script
-├── cli.js                   ← CLI mode script
-├── converter.js             ← Core conversion logic
-└── ...
-```
-
-## ⚡ ฟีเจอร์
-
-- ✅ **GUI Mode** - เลือกไฟล์ผ่าน Windows File Dialog
-- ✅ รองรับไฟล์ขนาดใหญ่ (10GB+)
-- ✅ แปลงทีละหลายไฟล์พร้อมกัน
-- ✅ Progress bar แสดงความคืบหน้า
-- ✅ บันทึกไฟล์ .frag ในโฟลเดอร์เดียวกับไฟล์ต้นฉบับ
-- ✅ จัดการหน่วยความจำอัตโนมัติ
-
-## 🔧 Requirements
-
-- Windows 10 หรือใหม่กว่า
-- Node.js 16+ (ดาวน์โหลดจาก https://nodejs.org)
-- PowerShell (มาพร้อม Windows)
-
-## 📦 การติดตั้ง
-```bash
-npm install
-```
-
-## 📝 Notes
-```
-- ไฟล์ขนาด < 500MB จะใช้ standard mode (เร็วกว่า)
-- ไฟล์ขนาด > 500MB จะใช้ streaming mode (ประหยัด RAM)
-- ไฟล์ output จะมีชื่อเดียวกับไฟล์ต้นฉบับ แต่เปลี่ยนเป็น .frag
-```
-
-## โครงสร้างไฟล์ทั้งหมด
-```
-ifc-converter-cli/
-├── _Input-Ifc/              (ถ้าใช้ auto mode)
-├── _Output-frag/            (ถ้าใช้ auto mode)
-├── node_modules/
-├── cli.js                   ← CLI mode
-├── gui-converter.js         ← GUI mode (ใหม่)
-├── converter.js
+```text
+ifc_to_frag-Local/
+├── converter.js                     # logic หลักของการแปลง
+├── cli.js                           # CLI: auto, convert, batch, folder
+├── gui-converter.js                 # GUI mode (Windows File Dialog)
+├── convert-gui.bat                  # ดับเบิลคลิก: เลือกไฟล์เอง (แนะนำ)
+├── convert.bat                      # ดับเบิลคลิก: แปลงทุกไฟล์ใน _Input-Ifc
+├── convert-with-subfolder.bat       # ดับเบิลคลิก: แปลงรวม subfolder ด้วย
+├── setup.bat                        # ติดตั้งครั้งแรก + สร้างโฟลเดอร์ input/output
 ├── package.json
-├── convert-gui.bat          ← ดับเบิลคลิกนี้ (แนะนำ)
-├── convert.bat              ← auto mode
-└── README.md
+├── _Input-Ifc/                      # (สร้างโดย setup.bat) วางไฟล์ IFC ที่นี่
+└── _Output-frag/                    # (สร้างโดย setup.bat) ไฟล์ .frag ที่แปลงแล้ว
 ```
+
+## การใช้งาน
+
+ติดตั้งครั้งแรก: ดับเบิลคลิก `setup.bat` (หรือรัน `npm install`)
+
+### วิธีที่ 1: GUI (ง่ายที่สุด)
+
+1. ดับเบิลคลิก `convert-gui.bat`
+2. เลือกไฟล์ IFC จาก File Dialog (Ctrl+Click เพื่อเลือกหลายไฟล์)
+3. ไฟล์ `.frag` จะถูกบันทึกในโฟลเดอร์เดียวกับไฟล์ `.ifc`
+
+### วิธีที่ 2: โฟลเดอร์เริ่มต้น
+
+1. วางไฟล์ IFC ใน `_Input-Ifc`
+2. ดับเบิลคลิก `convert.bat` (หรือ `convert-with-subfolder.bat` เพื่อรวม subfolder)
+3. ไฟล์ `.frag` จะอยู่ใน `_Output-frag`
+
+### วิธีที่ 3: Command line
+
+```bash
+node gui-converter.js                                  # GUI mode
+node cli.js auto                                       # ใช้โฟลเดอร์เริ่มต้น
+node cli.js convert "path/to/file.ifc" -o "out.frag"   # แปลงไฟล์เดียว
+node cli.js batch "models/*.ifc" -o "output"           # แปลงตาม pattern
+node cli.js folder "path/to/folder" -o "output" -r     # แปลงทั้งโฟลเดอร์ (-r รวม subfolder)
+```
+
+## การพัฒนา
+
+- logic การแปลงอยู่ใน `converter.js`; `cli.js` และ `gui-converter.js` เป็นแค่ตัวเรียกใช้
+- `@thatopen/fragments` ตั้งเป็น `latest` ใน `package.json` เวอร์ชันที่ได้จึงขึ้นกับวันที่รัน
+  `npm install` ควรล็อกเวอร์ชันให้ตรงกับ viewer ที่จะเปิดไฟล์ `.frag`
